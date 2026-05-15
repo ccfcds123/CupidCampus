@@ -1,0 +1,1879 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💘 丘比特校园 - CupidCampus</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --green: #5B8C5A;
+  --green-light: #7CB342;
+  --pink: #F06292;
+  --pink-light: #F8BBD0;
+  --bg-green: #e8f5e9;
+  --bg-pink: #fce4ec;
+  --card-bg: rgba(255, 255, 255, 0.75);
+  --text: #2d3436;
+  --text-secondary: #636e72;
+  --shadow: 0 8px 32px rgba(0,0,0,0.08);
+  --radius: 20px;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: linear-gradient(135deg, var(--bg-green) 0%, #f1f8e9 30%, #fce4ec 70%, var(--bg-pink) 100%);
+  min-height: 100vh;
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+}
+
+.app-container {
+  width: 100%;
+  max-width: 440px;
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ========== Header ========== */
+.app-header {
+  text-align: center;
+  padding: 16px 0 8px;
+  position: relative;
+}
+.app-header .logo {
+  font-size: 32px;
+  margin-bottom: 2px;
+}
+.app-header h1 {
+  font-size: 26px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--green), var(--pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.app-header .subtitle {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.header-profile-btn {
+  position: absolute;
+  top: 16px;
+  right: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.6);
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  cursor: pointer;
+  font-size: 18px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.header-profile-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.points-badge {
+  position: absolute;
+  top: 16px;
+  left: 0;
+  display: none;
+  align-items: center;
+  gap: 4px;
+  background: linear-gradient(135deg, #FFD54F, #FFB300);
+  color: #5D4037;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(255,179,0,0.3);
+  border: 2px solid rgba(255,255,255,0.6);
+}
+
+.vip-badge {
+  display: none;
+  align-items: center;
+  gap: 3px;
+  background: linear-gradient(135deg, #FFD700, #FFA000);
+  color: #3E2723;
+  padding: 4px 10px;
+  border-radius: 14px;
+  font-size: 11px;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(255,160,0,0.4);
+}
+
+/* ========== Pages ========== */
+.page {
+  display: none;
+  animation: fadeSlideIn 0.35s ease;
+  flex: 1;
+}
+.page.active { display: flex; flex-direction: column; }
+
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ========== Login Page ========== */
+.login-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-radius: var(--radius);
+  padding: 28px 24px;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255,255,255,0.6);
+  width: 100%;
+}
+.login-card h2 {
+  text-align: center;
+  font-size: 22px;
+  margin-bottom: 20px;
+  color: var(--green);
+}
+
+.form-section-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--pink);
+  margin: 22px 0 12px;
+  padding-bottom: 6px;
+  border-bottom: 2px dashed rgba(240, 98, 146, 0.2);
+}
+.form-section-title:first-of-type { margin-top: 0; }
+
+.form-row {
+  display: flex;
+  gap: 10px;
+}
+.form-row .form-group { flex: 1; }
+
+.form-group {
+  margin-bottom: 14px;
+}
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  font-size: 15px;
+  font-family: inherit;
+  background: rgba(255,255,255,0.7);
+  transition: all 0.2s;
+  outline: none;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--green-light);
+  box-shadow: 0 0 0 4px rgba(124, 179, 66, 0.12);
+}
+.form-group textarea {
+  resize: vertical;
+  min-height: 70px;
+}
+
+.mbti-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+.mbti-picker .mbti-option {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 2px solid #e0e0e0;
+  background: rgba(255,255,255,0.5);
+  cursor: pointer;
+  font-size: 12px;
+  font-family: inherit;
+  font-weight: 600;
+  transition: all 0.2s;
+  color: var(--text-secondary);
+}
+.mbti-picker .mbti-option:hover {
+  border-color: var(--pink);
+  background: rgba(255,255,255,0.8);
+}
+.mbti-picker .mbti-option.selected {
+  border-color: var(--pink);
+  background: var(--bg-pink);
+  color: var(--pink);
+}
+
+.multi-select-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+.multi-select-picker .tag-option {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 2px solid #e0e0e0;
+  background: rgba(255,255,255,0.5);
+  cursor: pointer;
+  font-size: 12px;
+  font-family: inherit;
+  font-weight: 600;
+  transition: all 0.2s;
+  color: var(--text-secondary);
+  user-select: none;
+}
+.multi-select-picker .tag-option:hover {
+  border-color: var(--pink);
+  background: rgba(255,255,255,0.8);
+}
+.multi-select-picker .tag-option.selected {
+  border-color: var(--pink);
+  background: var(--bg-pink);
+  color: var(--pink);
+}
+
+.hobby-category {
+  margin-bottom: 12px;
+}
+.hobby-category .hobby-cat-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+.hobby-category .multi-select-picker {
+  margin-top: 0;
+}
+
+.avatar-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+.avatar-picker .emoji-option {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  border-radius: 12px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: rgba(255,255,255,0.5);
+}
+.avatar-picker .emoji-option:hover {
+  background: rgba(255,255,255,0.9);
+  transform: scale(1.1);
+}
+.avatar-picker .emoji-option.selected {
+  border-color: var(--pink);
+  background: var(--bg-pink);
+  box-shadow: 0 0 0 3px rgba(240, 98, 146, 0.2);
+}
+
+.photo-upload-area {
+  border: 2px dashed #d0d0d0;
+  border-radius: 14px;
+  padding: 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: rgba(255,255,255,0.4);
+  margin-bottom: 12px;
+  position: relative;
+}
+.photo-upload-area:hover {
+  border-color: var(--pink);
+  background: rgba(255,255,255,0.7);
+}
+.photo-upload-area.has-photo {
+  border-style: solid;
+  border-color: var(--green-light);
+  padding: 8px;
+}
+.photo-upload-area input[type=file] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.photo-preview {
+  width: 100%;
+  max-height: 160px;
+  object-fit: cover;
+  border-radius: 10px;
+  display: none;
+}
+.photo-preview.visible {
+  display: block;
+}
+.photo-placeholder {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.photo-placeholder .upload-icon {
+  font-size: 32px;
+  display: block;
+  margin-bottom: 4px;
+}
+.photo-remove-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.5);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+.photo-upload-area.has-photo .photo-remove-btn {
+  display: flex;
+}
+
+.gender-toggle {
+  display: flex;
+  gap: 10px;
+}
+.gender-toggle button {
+  flex: 1;
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.5);
+  cursor: pointer;
+  font-size: 15px;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+.gender-toggle button:hover { background: rgba(255,255,255,0.8); }
+.gender-toggle button.selected {
+  border-color: var(--green-light);
+  background: #e8f5e9;
+  color: var(--green);
+  font-weight: 600;
+}
+
+.btn {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.25s;
+  letter-spacing: 0.5px;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--green), var(--green-light));
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(91, 140, 90, 0.3);
+}
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(91, 140, 90, 0.4);
+}
+.btn-primary:active { transform: translateY(0); }
+
+.btn-outline {
+  background: transparent;
+  border: 2px solid var(--green);
+  color: var(--green);
+}
+.btn-outline:hover { background: rgba(91, 140, 90, 0.08); }
+
+.btn-sm {
+  width: auto;
+  padding: 8px 16px;
+  font-size: 13px;
+}
+
+/* ========== Nav Tabs ========== */
+.nav-tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--card-bg);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-radius: 16px;
+  padding: 5px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255,255,255,0.6);
+}
+.nav-tab {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.nav-tab.active {
+  background: linear-gradient(135deg, var(--green), var(--green-light));
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(91, 140, 90, 0.3);
+}
+.nav-tab:hover:not(.active) {
+  background: rgba(91, 140, 90, 0.08);
+}
+
+/* ========== Matching Card ========== */
+.card-stack {
+  position: relative;
+  min-height: 380px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.match-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-radius: var(--radius);
+  padding: 0 0 20px 0;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255,255,255,0.6);
+  width: 100%;
+  overflow: hidden;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+.match-card.swipe-left {
+  transform: translateX(-120%) rotate(-12deg);
+  opacity: 0;
+}
+.match-card.swipe-right {
+  transform: translateX(120%) rotate(12deg);
+  opacity: 0;
+}
+
+.card-avatar {
+  width: 100%;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 80px;
+  background: linear-gradient(135deg, #e8f5e9 0%, #fce4ec 100%);
+  overflow: hidden;
+}
+.card-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-info {
+  padding: 18px 22px 0;
+}
+
+.card-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+}
+.match-score-badge {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #F06292, #FF8A65);
+  color: #fff;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(240,98,146,0.25);
+}
+.card-name {
+  font-size: 21px;
+  font-weight: 700;
+}
+.card-grade {
+  font-size: 12px;
+  color: var(--text-secondary);
+  background: rgba(91, 140, 90, 0.1);
+  padding: 3px 10px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+.card-gender-tag {
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+.card-gender-tag.male {
+  background: rgba(66, 165, 245, 0.15);
+  color: #1976d2;
+}
+.card-gender-tag.female {
+  background: rgba(240, 98, 146, 0.15);
+  color: #d81b60;
+}
+
+.card-meta-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+.card-meta-tag {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 8px;
+  background: rgba(91, 140, 90, 0.06);
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+.card-meta-tag.mbti {
+  background: rgba(156, 39, 176, 0.08);
+  color: #7B1FA2;
+  font-weight: 700;
+}
+
+.card-bio {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.card-report-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: #b0b0b0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 4px 0;
+  margin-top: 6px;
+  transition: color 0.2s;
+}
+.card-report-btn:hover { color: #e57373; }
+
+.list-report-btn {
+  font-size: 10px;
+  color: #b0b0b0;
+  background: none;
+  border: 1px solid #e0e0e0;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 4px 10px;
+  border-radius: 8px;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.list-report-btn:hover { color: #e57373; border-color: #e57373; background: rgba(229,115,115,0.05); }
+
+.card-actions {
+  display: flex;
+  gap: 16px;
+  padding: 16px 22px 0;
+  justify-content: center;
+}
+
+.action-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: none;
+  font-size: 26px;
+  cursor: pointer;
+  transition: all 0.25s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+}
+.action-btn:hover { transform: scale(1.08); }
+.action-btn:active { transform: scale(0.95); }
+
+.btn-skip {
+  background: #fff;
+  border: 2px solid #e0e0e0;
+}
+.btn-skip:hover { border-color: #bdbdbd; box-shadow: 0 6px 20px rgba(0,0,0,0.12); }
+
+.btn-like {
+  background: linear-gradient(135deg, #F06292, #EC407A);
+  color: #fff;
+  font-size: 28px;
+  box-shadow: 0 4px 16px rgba(240, 98, 146, 0.35);
+}
+.btn-like:hover { box-shadow: 0 6px 24px rgba(240, 98, 146, 0.5); }
+
+.counter-text {
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-secondary);
+}
+.empty-state .empty-icon { font-size: 56px; margin-bottom: 14px; }
+.empty-state h3 { font-size: 17px; margin-bottom: 8px; color: var(--text); }
+
+/* ========== Match Modal ========== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.25s ease;
+  padding: 20px;
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.match-modal {
+  background: #fff;
+  border-radius: 24px;
+  padding: 32px 24px;
+  text-align: center;
+  max-width: 360px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+@keyframes popIn {
+  from { transform: scale(0.7); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.match-modal .match-hearts {
+  font-size: 56px;
+  margin-bottom: 8px;
+  animation: pulse 0.6s ease infinite alternate;
+}
+@keyframes pulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.1); }
+}
+
+.match-modal h2 {
+  font-size: 24px;
+  margin-bottom: 6px;
+  background: linear-gradient(135deg, var(--pink), #e91e63);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.match-modal .match-pair {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 16px 0;
+}
+.match-modal .match-avatar { font-size: 48px; width: 72px; height: 72px; border-radius: 50%; overflow: hidden; display: inline-flex; align-items: center; justify-content: center; }
+.match-modal .match-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.match-modal .match-name { font-weight: 700; font-size: 18px; }
+.match-modal .match-and { font-size: 20px; color: var(--pink); font-weight: 700; }
+.match-modal .contact-info {
+  background: #f5f5f5;
+  border-radius: 12px;
+  padding: 14px;
+  margin: 16px 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ========== Profile Page ========== */
+.profile-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255,255,255,0.6);
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.profile-header .profile-emoji {
+  font-size: 48px;
+}
+.profile-header .profile-name {
+  font-size: 20px;
+  font-weight: 700;
+}
+.profile-header .profile-sub {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.profile-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.profile-info-item {
+  background: rgba(255,255,255,0.5);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+.profile-info-item .pi-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-bottom: 2px;
+}
+.profile-info-item .pi-value {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.profile-pref-section {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(0,0,0,0.06);
+}
+.profile-pref-section h4 {
+  font-size: 14px;
+  color: var(--pink);
+  margin-bottom: 10px;
+}
+.pref-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.pref-tag {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: rgba(240, 98, 146, 0.08);
+  color: var(--pink);
+  font-weight: 500;
+}
+
+/* ========== User List ========== */
+.user-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.user-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--card-bg);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-radius: 16px;
+  padding: 14px 16px;
+  border: 1px solid rgba(255,255,255,0.6);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  transition: all 0.2s;
+}
+.user-item:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+
+.user-item .user-emoji { font-size: 38px; min-width: 44px; width: 44px; height: 44px; text-align: center; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.user-item .user-emoji img { width: 100%; height: 100%; object-fit: cover; }
+.user-item .user-info { flex: 1; min-width: 0; }
+.user-item .user-name { font-weight: 700; font-size: 15px; }
+.user-item .user-meta { font-size: 11px; color: var(--text-secondary); margin-top: 1px; }
+.user-item .user-bio {
+  font-size: 12px; color: var(--text-secondary);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px;
+}
+.user-item .matched-badge {
+  font-size: 11px;
+  background: linear-gradient(135deg, #F06292, #EC407A);
+  color: #fff; padding: 3px 10px; border-radius: 10px; font-weight: 600; white-space: nowrap;
+}
+.user-item .liked-badge {
+  font-size: 11px;
+  background: rgba(91, 140, 90, 0.12);
+  color: var(--green); padding: 3px 10px; border-radius: 10px; font-weight: 600; white-space: nowrap;
+}
+
+/* ========== Bottom Nav ========== */
+.bottom-nav {
+  display: flex;
+  padding: 6px 16px;
+  padding-bottom: max(6px, env(safe-area-inset-bottom));
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-radius: 16px;
+  margin-top: 12px;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255,255,255,0.6);
+}
+.bottom-nav button {
+  flex: 1;
+  padding: 10px 6px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border-radius: 12px;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+.bottom-nav button .nav-icon { font-size: 22px; }
+.bottom-nav button.active {
+  color: var(--green);
+  background: rgba(91, 140, 90, 0.08);
+}
+
+/* ========== Toast ========== */
+.toast {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  z-index: 2000;
+  animation: toastIn 0.3s ease, toastOut 0.3s ease 1.7s forwards;
+  pointer-events: none;
+}
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+@keyframes toastOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* ========== Responsive ========== */
+@media (min-width: 768px) {
+  .app-container { padding-bottom: 16px; }
+  .card-stack { min-height: 420px; }
+  .card-avatar { height: 240px; font-size: 96px; }
+}
+
+/* ========== Chat Page ========== */
+.chat-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0 16px;
+}
+.chat-header .chat-back-btn {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.6);
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.chat-header .chat-back-btn:hover { transform: scale(1.08); }
+.chat-header .chat-partner-avatar {
+  width: 40px; height: 40px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; overflow: hidden; flex-shrink: 0;
+  background: linear-gradient(135deg, #e8f5e9 0%, #fce4ec 100%);
+}
+.chat-header .chat-partner-avatar img {
+  width: 100%; height: 100%; object-fit: cover;
+}
+.chat-header .chat-partner-name {
+  font-weight: 700; font-size: 16px;
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 300px;
+  max-height: calc(100vh - 280px);
+}
+
+.chat-msg {
+  max-width: 78%;
+  padding: 10px 14px;
+  border-radius: 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  word-break: break-word;
+  animation: msgIn 0.25s ease;
+}
+@keyframes msgIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.chat-msg.sent {
+  align-self: flex-end;
+  background: linear-gradient(135deg, #F06292, #EC407A);
+  color: #fff;
+  border-bottom-right-radius: 6px;
+}
+.chat-msg.received {
+  align-self: flex-start;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(0,0,0,0.06);
+  border-bottom-left-radius: 6px;
+  color: var(--text);
+}
+.chat-msg .msg-time {
+  font-size: 10px;
+  opacity: 0.6;
+  margin-top: 4px;
+  text-align: right;
+}
+
+.chat-empty {
+  text-align: center;
+  color: var(--text-secondary);
+  padding: 40px 20px;
+  font-size: 14px;
+}
+.chat-empty .chat-empty-icon { font-size: 48px; margin-bottom: 8px; }
+
+.chat-input-area {
+  display: flex;
+  gap: 8px;
+  padding: 8px 0;
+  background: var(--card-bg);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-radius: 16px;
+  padding: 8px 12px;
+  border: 1px solid rgba(255,255,255,0.6);
+  box-shadow: var(--shadow);
+}
+.chat-input-area input {
+  flex: 1;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 12px;
+  font-size: 14px;
+  font-family: inherit;
+  background: rgba(255,255,255,0.6);
+  outline: none;
+}
+.chat-input-area input:focus {
+  background: rgba(255,255,255,0.9);
+}
+.chat-input-area button {
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, var(--green), var(--green-light));
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.chat-input-area button:hover { transform: scale(1.08); }
+.chat-input-area button:active { transform: scale(0.95); }
+
+/* ========== Report Modal ========== */
+.report-modal-box {
+  background: #fff;
+  border-radius: 20px;
+  padding: 28px 24px;
+  max-width: 380px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  animation: popIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.report-modal-box h3 {
+  font-size: 18px;
+  margin-bottom: 6px;
+  text-align: center;
+}
+.report-modal-box .report-subtitle {
+  font-size: 13px;
+  color: var(--text-secondary);
+  text-align: center;
+  margin-bottom: 16px;
+}
+.report-reason-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.report-reason-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 14px;
+}
+.report-reason-option:hover { border-color: #bdbdbd; background: rgba(0,0,0,0.02); }
+.report-reason-option.selected {
+  border-color: #e57373;
+  background: rgba(229,115,115,0.05);
+}
+.report-reason-option .reason-icon { font-size: 20px; }
+.report-reason-option .reason-label { font-weight: 600; }
+.report-reason-option .reason-desc { font-size: 12px; color: var(--text-secondary); }
+.report-textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 80px;
+  outline: none;
+  margin-bottom: 16px;
+  transition: border-color 0.2s;
+}
+.report-textarea:focus { border-color: #e57373; }
+
+.typing-indicator {
+  align-self: flex-start;
+  padding: 8px 14px;
+  border-radius: 16px;
+  border-bottom-left-radius: 6px;
+  background: rgba(255,255,255,0.85);
+  border: 1px solid rgba(0,0,0,0.06);
+  font-size: 13px;
+  color: var(--text-secondary);
+  display: none;
+}
+.typing-indicator .dots { display: inline-block; }
+.typing-indicator .dots span {
+  display: inline-block; width: 6px; height: 6px;
+  border-radius: 50%; background: #bbb;
+  margin: 0 1px;
+  animation: dotBounce 1.4s infinite ease-in-out;
+}
+.typing-indicator .dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-indicator .dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes dotBounce {
+  0%, 80%, 100% { transform: scale(0.6); }
+  40% { transform: scale(1); }
+}
+
+/* ========== Shop Page ========== */
+.shop-gift-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.shop-gift-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 16px 10px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.6);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  transition: transform 0.2s;
+}
+.shop-gift-card:hover { transform: translateY(-2px); }
+.shop-gift-card .gift-icon { font-size: 40px; margin-bottom: 6px; }
+.shop-gift-card .gift-name { font-weight: 700; font-size: 14px; margin-bottom: 2px; }
+.shop-gift-card .gift-price { font-size: 12px; color: #FFB300; font-weight: 600; }
+.shop-gift-card .gift-owned { font-size: 11px; color: var(--text-secondary); margin-top: 4px; }
+
+/* ========== Membership Page ========== */
+.vip-hero {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  border-radius: 20px;
+  padding: 28px 20px;
+  text-align: center;
+  color: #fff;
+  margin-bottom: 16px;
+}
+.vip-hero .vip-crown { font-size: 56px; margin-bottom: 8px; }
+.vip-hero h3 { font-size: 22px; margin-bottom: 4px; }
+.vip-hero .vip-price { font-size: 36px; font-weight: 800; color: #FFD700; margin: 12px 0 4px; }
+.vip-hero .vip-price small { font-size: 14px; font-weight: 400; color: #ccc; }
+.vip-hero .vip-desc { font-size: 13px; color: #ccc; margin-bottom: 16px; }
+
+.vip-benefits {
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 16px;
+  border: 1px solid rgba(255,255,255,0.6);
+  margin-bottom: 12px;
+}
+.vip-benefits h4 { font-size: 14px; margin-bottom: 10px; }
+.vip-benefit-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 0; font-size: 14px;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+}
+.vip-benefit-item:last-child { border-bottom: none; }
+.vip-benefit-item .benefit-icon { font-size: 22px; }
+
+.locked-overlay {
+  position: relative;
+}
+.locked-content {
+  filter: blur(6px);
+  pointer-events: none;
+  user-select: none;
+}
+.locked-message {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(4px);
+  border-radius: 16px;
+  z-index: 5;
+}
+.locked-message .lock-icon { font-size: 40px; margin-bottom: 8px; }
+.locked-message .lock-text { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.locked-message .lock-sub { font-size: 12px; color: var(--text-secondary); margin-bottom: 10px; }
+
+.inventory-section {
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 16px;
+  border: 1px solid rgba(255,255,255,0.6);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+}
+.inventory-section h4 { font-size: 14px; margin-bottom: 10px; color: var(--text-secondary); }
+.inventory-items { display: flex; gap: 10px; flex-wrap: wrap; }
+.inventory-item {
+  text-align: center;
+  font-size: 12px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.5);
+}
+.inventory-item .inv-icon { font-size: 28px; }
+.inventory-item .inv-count { font-weight: 700; color: var(--pink); }
+
+.gift-received-toast {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #FFD54F, #FFB300);
+  color: #5D4037;
+  padding: 12px 20px;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 600;
+  z-index: 2000;
+  animation: toastIn 0.3s ease, toastOut 0.3s ease 2.7s forwards;
+  box-shadow: 0 4px 16px rgba(255,179,0,0.3);
+  pointer-events: none;
+}
+
+/* ========== Q&A ========== */
+.ask-btn {
+  font-size: 12px;
+  color: #7B1FA2;
+  background: rgba(156,39,176,0.06);
+  border: 1px solid rgba(156,39,176,0.2);
+  cursor: pointer;
+  font-family: inherit;
+  padding: 5px 12px;
+  border-radius: 14px;
+  white-space: nowrap;
+  transition: all 0.2s;
+  font-weight: 600;
+}
+.ask-btn:hover { background: rgba(156,39,176,0.12); border-color: rgba(156,39,176,0.4); }
+
+.qa-section {
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 16px;
+  border: 1px solid rgba(255,255,255,0.6);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  margin-top: 12px;
+}
+.qa-section h4 { font-size: 14px; margin-bottom: 10px; }
+.qa-item {
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+.qa-item:last-child { border-bottom: none; }
+.qa-question { font-size: 13px; color: #7B1FA2; font-weight: 500; margin-bottom: 4px; }
+.qa-question .qa-from { font-size: 11px; color: var(--text-secondary); font-weight: 400; }
+.qa-answer { font-size: 13px; color: var(--text); margin-top: 4px; padding: 8px 12px; background: rgba(91,140,90,0.06); border-radius: 10px; }
+.qa-answer .qa-badge { font-size: 10px; padding: 2px 6px; border-radius: 6px; margin-left: 6px; }
+.qa-answer .qa-badge.public { background: rgba(91,140,90,0.15); color: #5B8C5A; }
+.qa-answer .qa-badge.private { background: rgba(240,98,146,0.12); color: #d81b60; }
+.qa-actions { display: flex; gap: 6px; margin-top: 8px; }
+.qa-actions button {
+  font-size: 11px; padding: 4px 10px; border-radius: 8px; border: 1px solid #e0e0e0;
+  background: #fff; cursor: pointer; font-family: inherit; transition: all 0.2s;
+}
+.qa-actions button:hover { background: #f5f5f5; }
+.qa-actions button.qa-answer-btn { border-color: #5B8C5A; color: #5B8C5A; }
+.qa-actions button.qa-private-btn { border-color: #F06292; color: #F06292; }
+.qa-actions button.qa-ignore-btn { border-color: #ccc; color: #999; }
+
+/* ========== Campus Circle Feed ========== */
+.feed-post-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 16px;
+  border: 1px solid rgba(255,255,255,0.6);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  margin-bottom: 12px;
+}
+.feed-post-header {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
+}
+.feed-post-header .post-avatar {
+  width: 40px; height: 40px; border-radius: 50%; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; background: linear-gradient(135deg,#e8f5e9,#fce4ec); flex-shrink: 0;
+}
+.feed-post-header .post-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.feed-post-header .post-author { font-weight: 700; font-size: 14px; }
+.feed-post-header .post-time { font-size: 11px; color: var(--text-secondary); }
+.feed-post-text { font-size: 14px; line-height: 1.6; margin-bottom: 10px; word-break: break-word; }
+.feed-post-images { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+.feed-post-images img {
+  width: calc(33.33% - 4px); aspect-ratio: 1; object-fit: cover;
+  border-radius: 10px; cursor: pointer; transition: transform 0.2s;
+}
+.feed-post-images img:hover { transform: scale(1.03); }
+.feed-post-images.single img { width: 100%; aspect-ratio: auto; max-height: 260px; }
+.feed-post-actions {
+  display: flex; gap: 16px; padding-top: 8px;
+  border-top: 1px solid rgba(0,0,0,0.05);
+}
+.feed-post-actions button {
+  background: none; border: none; cursor: pointer; font-size: 13px;
+  font-family: inherit; color: var(--text-secondary); display: flex;
+  align-items: center; gap: 4px; padding: 4px 8px; border-radius: 8px; transition: all 0.2s;
+}
+.feed-post-actions button:hover { background: rgba(0,0,0,0.04); }
+.feed-post-actions button.liked { color: #e91e63; font-weight: 700; }
+.feed-comments { padding-top: 8px; }
+.feed-comment {
+  padding: 6px 0; font-size: 13px; display: flex; gap: 6px;
+  border-bottom: 1px solid rgba(0,0,0,0.03);
+}
+.feed-comment:last-child { border-bottom: none; }
+.feed-comment .cmt-author { font-weight: 600; color: var(--green); white-space: nowrap; }
+.feed-comment .cmt-text { color: var(--text); }
+.feed-comment-input {
+  display: flex; gap: 6px; margin-top: 8px;
+}
+.feed-comment-input input {
+  flex: 1; padding: 8px 10px; border: 1px solid #e0e0e0; border-radius: 10px;
+  font-size: 13px; font-family: inherit; outline: none;
+}
+.feed-comment-input input:focus { border-color: var(--green-light); }
+.feed-comment-input button {
+  padding: 6px 12px; border: none; border-radius: 10px;
+  background: var(--green); color: #fff; cursor: pointer; font-size: 12px; font-family: inherit;
+}
+
+.create-post-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 14px;
+  border: 1px solid rgba(255,255,255,0.6);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  margin-bottom: 14px;
+}
+.create-post-card textarea {
+  width: 100%; padding: 10px 12px; border: 1px solid #e0e0e0; border-radius: 12px;
+  font-size: 14px; font-family: inherit; resize: vertical; min-height: 70px; outline: none;
+  margin-bottom: 8px;
+}
+.create-post-card textarea:focus { border-color: var(--green-light); }
+.create-post-actions {
+  display: flex; align-items: center; gap: 8px;
+}
+.create-post-actions .img-upload-label {
+  font-size: 20px; cursor: pointer; padding: 4px 8px; border-radius: 8px; transition: all 0.2s;
+}
+.create-post-actions .img-upload-label:hover { background: rgba(0,0,0,0.05); }
+.create-post-actions input[type=file] { display: none; }
+.create-post-preview {
+  display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px;
+}
+.create-post-preview img {
+  width: 60px; height: 60px; object-fit: cover; border-radius: 8px;
+}
+.create-post-preview .preview-remove {
+  position: absolute; top: -6px; right: -6px;
+  width: 18px; height: 18px; border-radius: 50%; background: rgba(0,0,0,0.5);
+  color: #fff; border: none; cursor: pointer; font-size: 10px;
+}
+.preview-img-wrap { position: relative; display: inline-block; }
+</style>
+</head>
+<body>
+
+<div class="app-container" id="appContainer">
+
+  <!-- Header -->
+  <div class="app-header">
+    <div class="logo">💘</div>
+    <h1>丘比特校园</h1>
+    <p class="subtitle">CupidCampus · 遇见你的校园缘分</p>
+    <div class="points-badge" id="pointsBadge">🪙 <span id="pointsValue">0</span></div>
+    <span class="vip-badge" id="vipBadge">👑 VIP</span>
+    <button class="header-profile-btn" id="headerProfileBtn" onclick="openProfilePage()" title="编辑资料">⚙️</button>
+  </div>
+
+  <!-- ==================== Login Page ==================== -->
+  <div class="page active" id="loginPage">
+    <div class="login-card">
+      <h2>🎓 加入丘比特校园</h2>
+
+      <!-- Auth -->
+      <div class="form-section-title">🔐 账号信息</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>邮箱</label>
+          <input type="email" id="regEmail" placeholder="your@email.com">
+        </div>
+        <div class="form-group">
+          <label>密码</label>
+          <input type="password" id="regPassword" placeholder="设置密码（≥6位）" minlength="6">
+        </div>
+      </div>
+
+      <!-- Basic Info -->
+      <div class="form-section-title">📝 基本信息</div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>昵称</label>
+          <input type="text" id="regNickname" placeholder="你的昵称" maxlength="20">
+        </div>
+        <div class="form-group">
+          <label>性别</label>
+          <div class="gender-toggle" id="genderToggle">
+            <button data-gender="男" onclick="selectGender('男', this)">🙋 男</button>
+            <button data-gender="女" onclick="selectGender('女', this)">🙋‍♀️ 女</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>年级</label>
+          <select id="regGrade">
+            <option value="">请选择</option>
+            <option value="大一">大一</option><option value="大二">大二</option>
+            <option value="大三">大三</option><option value="大四">大四</option>
+            <option value="研一">研一</option><option value="研二">研二</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>学校</label>
+          <input type="text" id="regSchool" placeholder="如：清华大学" maxlength="30">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>专业</label>
+          <input type="text" id="regMajor" placeholder="如：计算机科学" maxlength="30">
+        </div>
+        <div class="form-group">
+          <label>所在城市</label>
+          <select id="regLocation">
+            <option value="">请选择</option>
+            <option value="北京">北京</option><option value="上海">上海</option>
+            <option value="广州">广州</option><option value="深圳">深圳</option>
+            <option value="杭州">杭州</option><option value="南京">南京</option>
+            <option value="武汉">武汉</option><option value="成都">成都</option>
+            <option value="西安">西安</option><option value="重庆">重庆</option>
+            <option value="其他">其他</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>MBTI 人格</label>
+        <div class="mbti-picker" id="regMbtiPicker"></div>
+      </div>
+
+      <div class="form-group">
+        <label>兴趣爱好（可多选）</label>
+        <div id="regHobbiesContainer"></div>
+      </div>
+
+      <div class="form-group">
+        <label>自我介绍（一句话）</label>
+        <textarea id="regBio" placeholder="写一句话介绍自己，让更多人了解你..." maxlength="100"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>上传照片（可选）</label>
+        <div class="photo-upload-area" id="regPhotoArea" onclick="document.getElementById('regPhotoInput').click()">
+          <input type="file" id="regPhotoInput" accept="image/*" onchange="handlePhotoUpload(this, 'regPhotoArea', 'regPhotoPreview', 'regPhotoRemove', 'regPhotoPlaceholder')" style="display:none;">
+          <img class="photo-preview" id="regPhotoPreview" alt="预览">
+          <div class="photo-placeholder" id="regPhotoPlaceholder">
+            <span class="upload-icon">📷</span>
+            点击上传照片
+          </div>
+          <button class="photo-remove-btn" id="regPhotoRemove" onclick="removePhoto('regPhotoInput','regPhotoArea','regPhotoPreview','regPhotoPlaceholder','regPhotoRemove'); event.stopPropagation();">✕</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>或选择默认头像</label>
+        <div class="avatar-picker" id="avatarPicker"></div>
+      </div>
+
+      <!-- Match Preferences -->
+      <div class="form-section-title">🎯 匹配偏好（可多选）</div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>期望对方性别</label>
+          <select id="regPrefGender">
+            <option value="不限">不限</option>
+            <option value="男">男生</option>
+            <option value="女">女生</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>期望年级</label>
+          <div class="multi-select-picker" id="regPrefGrade"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>期望所在城市</label>
+        <div class="multi-select-picker" id="regPrefLocation"></div>
+      </div>
+
+      <div class="form-group">
+        <label>期望 MBTI 类型</label>
+        <div class="multi-select-picker" id="regPrefMbti"></div>
+      </div>
+
+      <button class="btn btn-primary" onclick="handleRegister()" style="margin-top:8px;">
+        ✨ 开始匹配
+      </button>
+
+      <p style="text-align:center;margin-top:12px;font-size:12px;color:var(--text-secondary);">
+        已有账号？<a href="#" onclick="handleQuickLogin()" style="color:var(--green);font-weight:600;">立即登录</a>
+        （输入邮箱密码后点击登录）
+      </p>
+
+      <button class="btn btn-outline" onclick="localStorage.clear();location.reload();" style="margin-top:8px;font-size:13px;">
+        🗑️ 清除本地缓存
+      </button>
+    </div>
+  </div>
+
+  <!-- ==================== Main Page ==================== -->
+  <div class="page" id="mainPage">
+    <div class="nav-tabs">
+      <button class="nav-tab active" id="tabMatch" onclick="switchMainTab('match')">💘 发现</button>
+      <button class="nav-tab" id="tabMyPage" onclick="switchMainTab('mypage')">📋 我的配对</button>
+    </div>
+
+    <div id="matchSection" style="display:flex;flex-direction:column;flex:1;">
+      <div class="card-stack" id="cardStack"></div>
+      <div class="counter-text" id="matchCounter"></div>
+    </div>
+
+    <div id="myPageSection" style="display:none;flex:1;flex-direction:column;">
+      <div class="nav-tabs" style="margin-top:0;">
+        <button class="nav-tab active" id="subTabLike" onclick="switchSubTab('liked')">❤️ 我喜欢</button>
+        <button class="nav-tab" id="subTabLikedMe" onclick="switchSubTab('likedMe')">💌 喜欢我</button>
+        <button class="nav-tab" id="subTabMatched" onclick="switchSubTab('matched')">💑 已配对</button>
+      </div>
+      <div id="subTabContent" style="flex:1;"></div>
+    </div>
+  </div>
+
+  <!-- ==================== Profile Edit Page ==================== -->
+  <div class="page" id="profilePage">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+      <button class="btn btn-outline btn-sm" onclick="closeProfilePage()" style="width:auto;">← 返回</button>
+      <span style="font-weight:700;font-size:17px;">编辑个人资料</span>
+    </div>
+    <div class="profile-card" id="profileEditCard"></div>
+  </div>
+
+  <!-- ==================== Campus Circle Page ==================== -->
+  <div class="page" id="circlePage">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+      <span style="font-weight:700;font-size:17px;">🌳 校园圈</span>
+      <span style="font-size:12px;color:var(--text-secondary);" id="circlePostCount"></span>
+    </div>
+
+    <!-- Create Post -->
+    <div class="create-post-card">
+      <textarea id="postText" placeholder="分享你的校园生活..." maxlength="500"></textarea>
+      <div class="create-post-preview" id="postPreview"></div>
+      <div class="create-post-actions">
+        <label class="img-upload-label" title="添加图片">📷<input type="file" id="postImageInput" accept="image/*" multiple onchange="handlePostImages(this)"></label>
+        <button class="btn btn-primary btn-sm" onclick="publishPost()" style="margin-left:auto;">📝 发布</button>
+      </div>
+    </div>
+
+    <!-- Feed -->
+    <div id="feedContainer" style="flex:1;"></div>
+  </div>
+
+  <!-- ==================== Chat Page ==================== -->
+  <div class="page" id="chatPage">
+    <div class="chat-header">
+      <button class="chat-back-btn" onclick="closeChat()">←</button>
+      <div class="chat-partner-avatar" id="chatPartnerAvatar"></div>
+      <span class="chat-partner-name" id="chatPartnerName"></span>
+      <button class="list-report-btn" onclick="openGiftModalFromChat()" style="margin-left:auto;font-size:12px;" title="送礼物">🎁 送礼</button>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="chat-empty">
+        <div class="chat-empty-icon">💬</div>
+        发送第一条消息，开始聊天吧~
+      </div>
+    </div>
+    <div class="typing-indicator" id="typingIndicator">
+      <span id="typingText">对方正在输入</span><span class="dots"><span></span><span></span><span></span></span>
+    </div>
+    <div class="chat-input-area">
+      <input type="text" id="chatInput" placeholder="输入消息..." maxlength="300" onkeydown="if(event.key==='Enter')sendMessage()">
+      <button onclick="sendMessage()">➤</button>
+    </div>
+  </div>
+
+  <!-- ==================== Shop Page ==================== -->
+  <div class="page" id="shopPage">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+      <button class="btn btn-outline btn-sm" onclick="closeShop()" style="width:auto;">← 返回</button>
+      <span style="font-weight:700;font-size:17px;">🛍️ 积分商城</span>
+      <span style="margin-left:auto;font-weight:700;color:#FFB300;font-size:14px;">🪙 <span id="shopPointsDisplay">0</span> 积分</span>
+    </div>
+
+    <div class="shop-gift-grid" id="shopGiftGrid"></div>
+
+    <div class="inventory-section">
+      <h4>🎒 我的背包</h4>
+      <div class="inventory-items" id="inventoryDisplay">
+        <span style="font-size:13px;color:var(--text-secondary);">还没有礼物，去兑换吧~</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Nav -->
+  <div class="bottom-nav" id="bottomNav" style="display:none;">
+    <button id="bnMatch" class="active" onclick="goToMatch()">
+      <span class="nav-icon">💘</span> 发现
+    </button>
+    <button id="bnMyPage" onclick="goToMyPage()">
+      <span class="nav-icon">📋</span> 我的配对
+    </button>
+    <button id="bnCircle" onclick="goToCircle()">
+      <span class="nav-icon">🌳</span> 校园圈
+    </button>
+    <button id="bnShop" onclick="goToShop()">
+      <span class="nav-icon">🛍️</span> 商城
+    </button>
+    <button id="bnVip" onclick="goToMember()">
+      <span class="nav-icon">👑</span> VIP
+    </button>
+    <button onclick="handleLogout()">
+      <span class="nav-icon">🚪</span> 退出
+    </button>
+  </div>
+
+</div>
+
+<!-- Match Success Modal -->
+<div class="modal-overlay" id="matchModal" style="display:none;">
+  <div class="match-modal">
+    <div class="match-hearts">💞</div>
+    <h2>配对成功！</h2>
+    <p style="color:var(--text-secondary);font-size:14px;">你们互相喜欢！这是命中注定的缘分 ✨</p>
+    <div class="match-pair">
+      <div>
+        <div class="match-avatar" id="modalMyAvatar"></div>
+        <div class="match-name" id="modalMyName"></div>
+      </div>
+      <div class="match-and">&</div>
+      <div>
+        <div class="match-avatar" id="modalMatchAvatar"></div>
+        <div class="match-name" id="modalMatchName"></div>
+      </div>
+    </div>
+    <div class="contact-info" id="modalContactInfo"></div>
+    <div style="display:flex;gap:10px;" id="modalBtnArea">
+      <button class="btn btn-outline" onclick="openChatFromModal()" style="flex:1;">💬 开始聊天</button>
+      <button class="btn btn-primary" onclick="closeMatchModal()" style="flex:1;">🎉 太棒了！</button>
+    </div>
+  </div>
+</div>
+
+<!-- Report Modal -->
+<div class="modal-overlay" id="reportModal" style="display:none;">
+  <div class="report-modal-box">
+    <h3>🚩 举报用户</h3>
+    <p class="report-subtitle" id="reportTargetName"></p>
+    <div class="report-reason-group" id="reportReasonGroup">
+      <div class="report-reason-option" onclick="selectReportReason('harassment', this)">
+        <span class="reason-icon">🚫</span>
+        <div>
+          <div class="reason-label">骚扰信息</div>
+          <div class="reason-desc">发送不适当或骚扰性内容</div>
+        </div>
+      </div>
+      <div class="report-reason-option" onclick="selectReportReason('fake', this)">
+        <span class="reason-icon">📷</span>
+        <div>
+          <div class="reason-label">假照片/虚假资料</div>
+          <div class="reason-desc">使用他人照片或虚假个人信息</div>
+        </div>
+      </div>
+      <div class="report-reason-option" onclick="selectReportReason('other', this)">
+        <span class="reason-icon">❗</span>
+        <div>
+          <div class="reason-label">其他原因</div>
+          <div class="reason-desc">其他违规或不适当行为</div>
+        </div>
+      </div>
+    </div>
+    <textarea class="report-textarea" id="reportDescription" placeholder="请描述具体情况...（选填）" maxlength="300"></textarea>
+    <div style="display:flex;gap:10px;">
+      <button class="btn btn-outline" onclick="closeReportModal()" style="flex:1;">取消</button>
+      <button class="btn btn-primary" onclick="submitReport()" style="flex:1;background:linear-gradient(135deg,#e57373,#ef5350);box-shadow:0 4px 16px rgba(229,115,115,0.3);">提交举报</button>
+    </div>
+  </div>
+</div>
+
+<!-- Membership Page -->
+  <div class="page" id="memberPage">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+      <button class="btn btn-outline btn-sm" onclick="closeMemberPage()" style="width:auto;">← 返回</button>
+      <span style="font-weight:700;font-size:17px;">👑 会员中心</span>
+      <span id="memberVipBadge" style="margin-left:auto;"></span>
+    </div>
+
+    <div class="vip-hero" id="vipHero">
+      <div class="vip-crown">👑</div>
+      <h3>丘比特 VIP 会员</h3>
+      <p class="vip-desc">解锁全部功能，遇见更多缘分</p>
+      <div class="vip-price">¥9.9 <small>/ 月</small></div>
+      <button class="btn btn-primary" onclick="buyVip()" style="background:linear-gradient(135deg,#FFD700,#FFA000);color:#3E2723;max-width:260px;margin:12px auto 0;font-size:16px;">
+        ✨ 立即开通
+      </button>
+      <p style="font-size:11px;color:#999;margin-top:6px;">模拟支付，点击即开通</p>
+    </div>
+
+    <div class="vip-benefits">
+      <h4>🎖️ 会员权益</h4>
+      <div class="vip-benefit-item"><span class="benefit-icon">❤️</span> 无限次喜欢，不再受限</div>
+      <div class="vip-benefit-item"><span class="benefit-icon">👁️</span> 查看谁喜欢了我</div>
+      <div class="vip-benefit-item"><span class="benefit-icon">💬</span> 无限聊天消息</div>
+      <div class="vip-benefit-item"><span class="benefit-icon">🪙</span> 每日签到 +15 积分</div>
+    </div>
+
+    <div style="background:var(--card-bg);backdrop-filter:blur(10px);border-radius:16px;padding:16px;border:1px solid rgba(255,255,255,0.6);">
+      <h4 style="font-size:14px;margin-bottom:10px;">💰 充值积分</h4>
+      <p style="font-size:12px;color:var(--text-secondary);margin-bottom:10px;">1元 = 10积分，选择充值金额：</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+        <button class="btn btn-outline btn-sm" onclick="doRecharge(6)" style="flex:1;">6元<br><small>60积分</small></button>
+        <button class="btn btn-outline btn-sm" onclick="doRecharge(12)" style="flex:1;">12元<br><small>120积分</small></button>
+        <button class="btn btn-outline btn-sm" onclick="doRecharge(30)" style="flex:1;">30元<br><small>300积分</small></button>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <input type="number" id="rechargeAmount" placeholder="自定义金额" min="1" max="999" style="flex:1;padding:10px 12px;border:2px solid #e0e0e0;border-radius:12px;font-size:14px;font-family:inherit;outline:none;">
+        <button class="btn btn-primary btn-sm" onclick="doRecharge(parseInt(document.getElementById('rechargeAmount').value)||0)" style="flex:0;">充值</button>
+      </div>
+      <p style="font-size:11px;color:#999;margin-top:6px;">模拟支付，点击即到账</p>
+    </div>
+  </div>
+
+<!-- Gift Send Modal -->
+<div class="modal-overlay" id="giftModal" style="display:none;">
+  <div class="report-modal-box">
+    <h3>🎁 送礼物</h3>
+    <p class="report-subtitle" id="giftTargetName">送给：</p>
+    <div class="shop-gift-grid" id="giftOptions" style="margin-bottom:8px;"></div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn btn-outline" onclick="closeGiftModal()" style="flex:1;">取消</button>
+    </div>
+  </div>
+</div>
+
+<!-- Ask Question Modal -->
+<div class="modal-overlay" id="askModal" style="display:none;">
+  <div class="report-modal-box">
+    <h3>💬 匿名提问</h3>
+    <p class="report-subtitle" id="askTargetName"></p>
+    <textarea class="report-textarea" id="askText" placeholder="输入你的问题...（匿名发送）" maxlength="200" style="min-height:100px;"></textarea>
+    <div style="display:flex;gap:10px;">
+      <button class="btn btn-outline" onclick="closeAskModal()" style="flex:1;">取消</button>
+      <button class="btn btn-primary" onclick="submitQuestion()" style="flex:1;">📨 匿名发送</button>
+    </div>
+  </div>
+</div>
+
+<!-- Answer Question Modal -->
+<div class="modal-overlay" id="answerModal" style="display:none;">
+  <div class="report-modal-box">
+    <h3>✏️ 回答问题</h3>
+    <p class="report-subtitle" id="answerQuestionText"></p>
+    <textarea class="report-textarea" id="answerText" placeholder="输入你的回答..." maxlength="300" style="min-height:100px;"></textarea>
+    <div style="display:flex;gap:10px;">
+      <button class="btn btn-outline" onclick="closeAnswerModal()" style="flex:1;">取消</button>
+      <button class="btn btn-outline" onclick="submitAnswer('public')" style="flex:1;border-color:#5B8C5A;color:#5B8C5A;">🌐 公开回答</button>
+      <button class="btn btn-outline" onclick="submitAnswer('private')" style="flex:1;border-color:#F06292;color:#F06292;">🔒 私密回答</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div id="toastContainer"></div>
+
+<script src="app.js?v=4"></script>
+<script>
+// 异步加载 Supabase SDK，不阻塞 UI
+(function(){
+  var CDNS = [
+    'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js',
+    'https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.min.js'
+  ];
+  var TIMEOUT = 8000;
+
+  function tryLoad(i) {
+    if (i >= CDNS.length) {
+      console.warn('所有 CDN 均不可用，后端功能离线');
+      if (typeof showToast === 'function') showToast('网络连接失败，请刷新页面重试');
+      return;
+    }
+    var s = document.createElement('script');
+    s.src = CDNS[i];
+    s.onload = function() {
+      console.log('Supabase SDK ready (CDN ' + (i + 1) + ')');
+      if (typeof initSupabase === 'function') initSupabase();
+    };
+    s.onerror = function() {
+      console.warn('CDN ' + (i + 1) + ' 不可用，尝试下一个...');
+      tryLoad(i + 1);
+    };
+    document.head.appendChild(s);
+    var idx = i;
+    setTimeout(function() {
+      if (!window.supabase) {
+        if (idx < CDNS.length - 1) {
+          console.warn('CDN ' + (idx + 1) + ' 超时，尝试备用...');
+          tryLoad(idx + 1);
+        } else {
+          console.warn('Supabase CDN 超时，后端功能不可用');
+          if (typeof showToast === 'function') showToast('服务器连接超时，请检查网络后刷新');
+        }
+      }
+    }, TIMEOUT);
+  }
+
+  tryLoad(0);
+})();
+</script>
+</body>
+</html>
