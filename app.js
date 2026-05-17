@@ -88,17 +88,18 @@ function requireClient() {
 async function signUp(email, password, profileData) {
   if (!requireClient()) return null;
   try {
-    const { data, error } = await sb.auth.signUp({ email, password });
+    const { data, error } = await sb.auth.signUp({
+      email,
+      password,
+      options: { data: { nickname: profileData.nickname } }
+    });
     if (error) { console.error('signUp error:', error); showToast('注册失败: ' + (error.message || error.msg || JSON.stringify(error))); return null; }
     if (!data.user) { showToast('请检查邮箱确认链接（或关闭邮箱验证）'); return null; }
 
     if (data.session) {
-      // 已登录，直接更新 profile
       const { error: updateErr } = await sb.from('profiles').update(profileData).eq('id', data.user.id);
       if (updateErr) console.error('profile update error:', updateErr);
     } else {
-      // 需要邮箱验证，此时无 session，RLS 会拦截 UPDATE
-      // 数据保存到 localStorage，登录后 enterApp 中补写
       console.log('signUp: no session, saving profile data to localStorage');
       localStorage.setItem('pendingProfile', JSON.stringify(profileData));
     }
@@ -369,8 +370,15 @@ async function handleRegister() {
 
   const result = await signUp(email, password, profileData);
   if (result) {
-    await getCurrentProfile();
-    enterApp();
+    if (result.session) {
+      await getCurrentProfile();
+      enterApp();
+    } else {
+      showToast('注册成功！请前往邮箱点击确认链接完成验证');
+      document.getElementById('regForm').style.display = 'none';
+      document.getElementById('regForm').insertAdjacentHTML('afterend',
+        '<div id="verifyNotice" style="text-align:center;padding:30px;color:#666;"><h3>📧 验证邮件已发送</h3><p>请检查邮箱并点击确认链接</p><p style="font-size:13px;margin-top:10px;">验证后刷新本页面即可自动登录</p></div>');
+    }
   }
 }
 
@@ -388,6 +396,7 @@ async function handleQuickLogin() {
 // ==================== APP ENTRY ====================
 
 async function enterApp() {
+  if (!currentUser) { console.warn('enterApp: currentUser is null, aborting'); return; }
   document.getElementById('loginPage').classList.remove('active');
   document.getElementById('loginPage').style.display = 'none';
   hideAllPages();
